@@ -10,10 +10,11 @@ import Link from "@ckeditor/ckeditor5-link/src/link";
 import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
 import ElementId from "./element-id/element-id";
 import { Notification } from "@ckeditor/ckeditor5-ui";
-import { SourceEditing } from '@ckeditor/ckeditor5-source-editing';
-import GeneralHtmlSupport from '@ckeditor/ckeditor5-html-support/src/generalhtmlsupport';
+import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";
+import GeneralHtmlSupport from "@ckeditor/ckeditor5-html-support/src/generalhtmlsupport";
+import DecoupledEditor from "@ckeditor/ckeditor5-editor-decoupled/src/decouplededitor";
 
-ClassicEditor.create(document.querySelector("#editor"), {
+DecoupledEditor.create(document.querySelector("#editor"), {
   plugins: [
     Essentials,
     Bold,
@@ -26,7 +27,7 @@ ClassicEditor.create(document.querySelector("#editor"), {
     ElementId,
     Notification,
     SourceEditing,
-    GeneralHtmlSupport
+    GeneralHtmlSupport,
   ],
   toolbar: [
     "heading",
@@ -38,7 +39,7 @@ ClassicEditor.create(document.querySelector("#editor"), {
     "link",
     "|",
     "elementId",
-    "sourceEditing"
+    "sourceEditing",
   ],
   htmlSupport: {
     allow: [
@@ -51,6 +52,9 @@ ClassicEditor.create(document.querySelector("#editor"), {
   },
 })
   .then((editor) => {
+    const toolbarContainer = document.querySelector("#toolbar-container");
+    toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+
     console.log("Editor was initialized", editor);
     CKEditorInspector.attach(editor);
   })

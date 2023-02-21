@@ -84,7 +84,7 @@ export default class ElementIdCommand extends Command {
 
           const attributes = toMap(selection.getAttributes());
 
-          attributes.set("customId", title);
+          attributes.set("abbreviation", title);
 
           const { end: positionAfter } = model.insertContent(
             writer.createText(abbr, attributes),
@@ -94,15 +94,15 @@ export default class ElementIdCommand extends Command {
           writer.setSelection(positionAfter);
         }
 
-        writer.removeSelectionAttribute("customId");
+        writer.removeSelectionAttribute("abbreviation");
       } else {
         const ranges = model.schema.getValidRanges(
           selection.getRanges(),
-          "customId"
+          "abbreviation"
         );
 
         for (const range of ranges) {
-          writer.setAttribute("customId", title, range);
+          writer.setAttribute("abbreviation", title, range);
         }
       }
     });
