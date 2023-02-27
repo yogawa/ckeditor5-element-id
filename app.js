@@ -13,8 +13,18 @@ import { Notification } from "@ckeditor/ckeditor5-ui";
 import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";
 import GeneralHtmlSupport from "@ckeditor/ckeditor5-html-support/src/generalhtmlsupport";
 import DecoupledEditor from "@ckeditor/ckeditor5-editor-decoupled/src/decouplededitor";
+// import Markdown from "@ckeditor/ckeditor5-markdown-gfm/src/markdown";
+import GFMDataProcessor from "@ckeditor/ckeditor5-markdown-gfm/src/gfmdataprocessor";
+// import * as showdown from './showdown';
 
-DecoupledEditor.create(document.querySelector("#editor"), {
+function Markdown(editor) {
+  editor.data.processor = new GFMDataProcessor(editor.editing.view.document);
+  editor.data.processor.keepHtml("h2");
+  editor.data.processor.keepHtml("p");
+}
+
+var theEditor;
+ClassicEditor.create(document.querySelector("#editor"), {
   plugins: [
     Essentials,
     Bold,
@@ -27,7 +37,7 @@ DecoupledEditor.create(document.querySelector("#editor"), {
     ElementId,
     Notification,
     SourceEditing,
-    GeneralHtmlSupport,
+    GeneralHtmlSupport
   ],
   toolbar: [
     "heading",
@@ -52,12 +62,27 @@ DecoupledEditor.create(document.querySelector("#editor"), {
   },
 })
   .then((editor) => {
-    const toolbarContainer = document.querySelector("#toolbar-container");
-    toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+    // const toolbarContainer = document.querySelector("#toolbar-container");
+    // toolbarContainer.appendChild(editor.ui.view.toolbar.element);
 
     console.log("Editor was initialized", editor);
     CKEditorInspector.attach(editor);
+
+    // editor.on("change:isReadOnly", (evt, name, value, oldValue) => {
+    //   if (value == true) {
+    //     return (editor.data.processor = new MarkdownDataProcessor()); // editor.getData() in Markdown.
+    //   }
+
+    //   editor.data.processor = new HtmlDataProcessor(); // editor.getData() in HTML.
+    // });
+
+    editor.setData('<h1 id="coba">Test</h1>');
+    theEditor = editor;
   })
   .catch((error) => {
     console.error(error.stack);
   });
+
+document.querySelector("#check-btn").addEventListener("click", () => {
+  console.log(theEditor.getData());
+});
